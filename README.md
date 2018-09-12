@@ -8,18 +8,18 @@ plotUlog is octave(open source equivalance of matlab) .m script package for plot
 
 ### Installation
 
-Install octave
+- Install octave
 ```bash
 $ sudo apt-get install octave
 ```
 Octave can be run from launch bar in ubuntu 
 
-Install pyulog which will parse ULog file and convert to .csv files.
+- Install **pyulog** which will parse ULog file and convert to .csv files.
 
 **pyulog** can be downloaded from [here](https://github.com/PX4/pyulog)
 or visit https://github.com/PX4/pyulog
 
-clone this git or download and unzip package in any folder.
+- clone plotulog git or download and unzip package in any folder.
 
 ### File name
 
