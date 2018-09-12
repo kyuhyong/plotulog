@@ -8,6 +8,7 @@ plotUlog is octave(open source equivalance of matlab) .m script package for plot
 
 ### Installation
 
+
 - Install octave
 ```bash
 $ sudo apt-get install octave
@@ -21,7 +22,8 @@ or visit https://github.com/PX4/pyulog
 
 - clone plotulog git or download and unzip package in any folder.
 
-### File name
+## File name
+
 
 Depending on the version of px4 firmware, ULog file can have different names. 
 
@@ -33,7 +35,9 @@ For convenience, change the .ulg file as
 
 **log###.ulg**
 
-### Run
+## Run
+
+
 Launch octave and go to the folder you just cloned or unzipped.
 
 Copy a ULog file into the folder.
@@ -53,7 +57,9 @@ Once .csv files are created you can re-plot by entering the folder created from 
 plotUlog("###_Description/")
 ```
 
-### Development
+## Development
+
+
 See what's inside the script file and manipulate any of data you want. 
 
 Octave script is similar to matlab code and easy to handle lots of data.
