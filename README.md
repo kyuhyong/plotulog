@@ -6,7 +6,7 @@ plotUlog is octave(open source equivalance of matlab) .m script package for plot
 
 [![Youtube plotUlog](http://img.youtube.com/vi/EZv81fV9Rec/0.jpg)](https://www.youtube.com/watch?v=EZv81fV9Rec "plotUlog")
 
-### Installation
+## Installation
 
 
 - Install octave
