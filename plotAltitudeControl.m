@@ -22,7 +22,7 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz, time_sp, sp_
     set (gca, "xminorgrid", "on");
     hold on;  
     plot(time_sp, -sp_vz,'LineWidth',1.5);
-    plot(time_input_rc, input_z/10, 'LineWidth',1.5);
+    plot(time_input_rc, input_z, 'LineWidth',1.5);
     legend("LP Vz", "Setpoint Vz", "Throttle");
     hold off;
   saveName = sprintf("%sAltitude_Control.png", path)
