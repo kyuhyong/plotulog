@@ -119,7 +119,7 @@ function plotUlogs(varargin)
   if(data_flow_avail)
     data_flow = dlmread(fname_flow,',',1,0);
     time_flow = data_flow(:,1)/1000000; flow_int_xy = [ data_flow(:,2) data_flow(:,3) ];
-  else flow_int_xy = [ 0 0 ];
+  else time_flow = 0; flow_int_xy = [ 0 0 ];
   endif;
   if(data_sensor_avail)
     time_sensor = data_sens(:,1)/1000000; 
