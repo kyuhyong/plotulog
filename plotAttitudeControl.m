@@ -1,4 +1,4 @@
-function plotAttitudeControl(time_att, att_rpy, att_q, time_att_sp, att_rpy_sp, time_input_rc, input_rc, path)
+function plotAttitudeControl(time_att, att_rpy_speed, att_q, time_att_sp, att_rpy_sp, time_input_rc, input_rc, path)
   input_roll = (input_rc(:,1)-1500)/500;  %rc roll channel set to 3
   input_pitch = (input_rc(:,2)-1500)/500;  %rc roll channel set to 3
   input_yaw = (input_rc(:,3)-1500)/500;
@@ -11,7 +11,7 @@ function plotAttitudeControl(time_att, att_rpy, att_q, time_att_sp, att_rpy_sp, 
     plot(time_att, rpy(:,1),'LineWidth',1.3);
     xlim( [ time_att(1) time_att(length(time_att)) ]);
     grid on;
-    set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("Roll");  title("Roll");
+    set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("Angle");  title("Roll");
     hold on;
     plot(time_att_sp, att_rpy_sp(:,1)*180/pi, 'LineWidth',1.3);
     plot(time_input_rc, input_roll, 'LineWidth',1.2);
@@ -21,7 +21,7 @@ function plotAttitudeControl(time_att, att_rpy, att_q, time_att_sp, att_rpy_sp, 
     plot(time_att, rpy(:,2),'LineWidth',1.3);
     xlim( [ time_att(1) time_att(length(time_att)) ]);
     grid on;
-    set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("Roll");  title("Pitch");
+    set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("Angle");  title("Pitch");
     hold on;
     plot(time_att_sp, att_rpy_sp(:,2)*180/pi, 'LineWidth',1.3);
     plot(time_input_rc, input_pitch, 'LineWidth',1.2);
