@@ -84,7 +84,8 @@ function plotUlogs(varargin)
     data_att = dlmread(fname_att,',',1,0);
     time_att = data_att(:,1)/1000000; 
     att_rpy = [ data_att(:,2) data_att(:,3) data_att(:,4) ]; 
-  else time_att = 0; att_rpy = [0 0 0];
+    att_q = [data_att(:,5) data_att(:,6) data_att(:,7) data_att(:,8) ];
+  else time_att = 0; att_rpy = [0 0 0]; att_q = [0 0 0 0];
   endif
   if(data_att_sp_avail)
     data_att_sp = dlmread(fname_att_sp,',',1,0);
@@ -156,7 +157,7 @@ function plotUlogs(varargin)
   endif
   
   %% Plot attitude control
-  plotAttitudeControl(time_att, att_rpy, time_att_sp, att_rpy_sp, time_input_rc, input_rc, folderName);
+  plotAttitudeControl(time_att, att_rpy, att_q, time_att_sp, att_rpy_sp, time_input_rc, input_rc, folderName);
   %% Plot raw sensor data
   plotSensorData(time_sensor, gyro_xyz, acc_xyz, folderName);
   %% Plot for Z axis data
