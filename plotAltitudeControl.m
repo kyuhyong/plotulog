@@ -1,6 +1,6 @@
 function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz, time_sp, sp_z, sp_vz, time_distance, current_distance, time_input_rc, input_rc, path)
   input_z = (input_rc(:,3)-1500)/500;  %rc roll channel set to 3
-  h_alt = figure(3,'Position',[100,450,600,500]);
+  h_alt = figure(4,'Position',[100,450,600,500]);
   subplot(211)
     plot(time_lp, -lp_z,'LineWidth',1.2);
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);

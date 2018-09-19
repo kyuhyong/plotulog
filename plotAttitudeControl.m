@@ -30,4 +30,18 @@ function plotAttitudeControl(time_att, att_rpy_speed, att_q, time_att_sp, att_rp
     
   saveName = sprintf("%sAttitude_Control.png", path)
   saveas(h_att,saveName);
+
+  h_yaw = figure(2,'Position',[0,800,600,400]);
+  plot(time_att, rpy(:,3),'LineWidth',1.5);
+  xlim( [ time_att(1) time_att(length(time_att)) ]);
+  grid on;
+  set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("Heading");  title("Yaw");
+  hold on;
+  plot(time_att_sp, att_rpy_sp(:,3)*180/pi, 'LineWidth',1.5);
+  plot(time_input_rc, input_yaw, 'LineWidth',1.2);
+  [hleg1 hobj1] = legend("IMU", "Setpoint", "Input Yaw");
+  
+  saveName = sprintf("%sAttitude_Yaw_Control.png", path)
+  saveas(h_yaw,saveName);
+
 endfunction
