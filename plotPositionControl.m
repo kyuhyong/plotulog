@@ -1,4 +1,9 @@
-function plotPositionControl(time_lp, lp_xyz, lp_Vxyz, time_sp, sp_xyz, sp_Vxyz, time_flow, flow_int_xy, time_input_rc, input_rc, path)  
+function plotPositionControl(time_lp, lp_xyz, lp_Vxyz, 
+    time_sp, sp_xyz, sp_Vxyz, 
+    time_flow, flow_int_xy, 
+    time_input_rc, input_rc, 
+    time_v_status, v_status,
+    path)  
   % Local pos NED has x towards North, y East and z Down. 
   input_x = (input_rc(:,1)-1500)/100;  %RC Roll channel set to 1 and Robot frame y is torward the Right
   input_y = (input_rc(:,2)-1500)/100;  %RC Pitch channel set to 2 and Robot frame x is towards the Front
@@ -31,17 +36,53 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz, time_sp, sp_xyz, sp_Vxyz,
     plot(time_lp,lp_xyz(:,1), 'r-','LineWidth',1.5);
     grid on;
     set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("X (m)");  title("Position X (To East)");
+    xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_xyz(:,1), 'LineWidth',1.5);
     legend("Local pos", "Set Point");
+    pos = get(gca, "Position");   %Get plot position [x, y, width, height]
+    pos_x_prev = 0;
+    annotation("textbox", [pos(1) pos(2) 0.1 0.1],"string",getNavState(v_status(1,1)) , "color","b", "backgroundcolor","w");
+    for i=2:length(time_v_status)
+      if(v_status(i,1)!=v_status(i-1,1))
+        pos_x = (time_v_status(i)-time_lp(1))/(time_lp(length(time_lp)) - time_lp(1));
+        if( (pos_x - pos_x_prev) < 0.04) hgt = 0.02; else hgt = 0; endif;
+        x0 = pos(1) + pos_x * pos(3);
+        y0 = pos(2);
+        x1 = x0;
+        y1 = pos(2)+pos(4);
+        msg = getNavState(v_status(i,1));
+        annotation("line", [x0 x1], [y0 y1], "color","b");
+        annotation("textbox", [x0 y0 + hgt 0.1 0.1],"string", msg, "color","b", "backgroundcolor","w");
+        pos_x_prev = pos_x;
+      endif
+    endfor
     hold off;
   subplot(212)
     plot(time_lp, lp_xyz(:,2), 'r-','LineWidth',1.5);  
     grid on;
     set (gca, "xminorgrid", "on"); xlabel("Time(sec)");  ylabel("Y (m)");  title("Position Y (To North)");
+    xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_xyz(:,2), 'LineWidth',1.5);
     legend("Local pos", "Set Point");
+    pos = get(gca, "Position");   %Get plot position [x, y, width, height]
+    pos_x_prev = 0;
+    annotation("textbox", [pos(1) pos(2) 0.1 0.1],"string",getNavState(v_status(1,1)) , "color","b", "backgroundcolor","w");
+    for i=2:length(time_v_status)
+      if(v_status(i,1)!=v_status(i-1,1))
+        pos_x = (time_v_status(i)-time_lp(1))/(time_lp(length(time_lp)) - time_lp(1));
+        if( (pos_x - pos_x_prev) < 0.04) hgt = 0.02; else hgt = 0; endif;
+        x0 = pos(1) + pos_x * pos(3);
+        y0 = pos(2);
+        x1 = x0;
+        y1 = pos(2)+pos(4);
+        msg = getNavState(v_status(i,1));
+        annotation("line", [x0 x1], [y0 y1], "color","b");
+        annotation("textbox", [x0 y0 + hgt 0.1 0.1],"string", msg, "color","b", "backgroundcolor","w");
+        pos_x_prev = pos_x;
+      endif
+    endfor
     hold off;
   saveName = sprintf("%sPosition_Control.png", path)
   saveas(h_xy,saveName);
@@ -51,6 +92,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz, time_sp, sp_xyz, sp_Vxyz,
     plot(time_lp,lp_Vxyz(:,1), 'LineWidth',1.5);
     grid on;
     set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("X speed (m/s)");  title("Velocity X (To North)");
+    xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,1),'LineWidth',1);
     legend("Local pos", "Set Point");
@@ -59,6 +101,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz, time_sp, sp_xyz, sp_Vxyz,
     plot(time_lp, lp_Vxyz(:,2), 'LineWidth',1.5);  
     grid on;
     set (gca, "xminorgrid", "on"); xlabel("Time(sec)");  ylabel("Y speed (m/s)");  title("Velocity Y (To East)");
+    xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,2),'LineWidth',1);
     legend("Local pos", "Set Point");

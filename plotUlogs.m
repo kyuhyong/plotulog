@@ -12,8 +12,8 @@ function plotUlogs(varargin)
 
 % Author: Kyuhyong You
 % Website: https://github.com/kyuhyong/plotulog
-% Sep 2018; Last revision: 12-Sep-2018
-
+% Sep 2018; 
+% Revision: 2018/9/28
 %------------- BEGIN CODE --------------
   input_ulogFile = false;
   input_folderName = false;
@@ -63,9 +63,15 @@ function plotUlogs(varargin)
   fname_input_rc = sprintf("%slog%s_input_rc_0.csv",folderName, fnum);
   fname_power_sys = sprintf("%slog%s_system_power_0.csv",folderName, fnum);
   fname_batt_sts = sprintf("%slog%s_battery_status_0.csv",folderName, fnum);
+  fname_air_data = sprintf("%slog%s_vehicle_air_data_0.csv",folderName, fnum);
+  fname_land_detect = sprintf("%slog%s_vehicle_land_detected_0.csv",folderName, fnum);
+  fname_v_status = sprintf("%slog%s_vehicle_status_0.csv",folderName, fnum);
   
   %% Check files
-  data_att_avail = true; data_att_sp_avail = true; data_lp_avail = true; data_lp_sp_avail = true; data_dbg_vect_avail = true; data_flow_avail = true; data_sensor_avail = true; data_distance_avail = true; data_input_rc_avail = true;
+  data_att_avail = true; data_att_sp_avail = true; data_lp_avail = true; data_lp_sp_avail = true; data_dbg_vect_avail = true; data_flow_avail = true; 
+  data_sensor_avail = true; data_distance_avail = true; data_input_rc_avail = true;
+  data_air_data_avail = true; data_land_detect_avail = true; data_v_status_avail = true;
+  
   data_pwr_sys_avail = true; data_batt_sts_avail = true;
   if(!checkFile(fname_att)) data_att_avail = false; endif;
   if(!checkFile(fname_att_sp)) data_att_sp_avail = false; endif;
@@ -78,6 +84,9 @@ function plotUlogs(varargin)
   if(!checkFile(fname_input_rc)) data_input_rc_avail = false; endif;
   if(!checkFile(fname_power_sys)) data_pwr_sys_avail = false; endif;
   if(!checkFile(fname_batt_sts)) data_batt_sts_avail = false; endif;
+  if(!checkFile(fname_air_data)) data_air_data_avail = false; endif;
+  if(!checkFile(fname_land_detect)) data_land_detect_avail = false; endif;
+  if(!checkFile(fname_v_status)) data_v_status_avail = false; endif;
   
   %% If file is available, read data from the file. otherwise set data as zero
   if(data_att_avail)
@@ -155,17 +164,51 @@ function plotUlogs(varargin)
   else
     time_batt = 0; batt_V = 0; batt_curr = 0; batt_disch_mah = 0;
   endif
-  
+    if(data_air_data_avail)
+    data_air = dlmread(fname_air_data, ',',1,0);
+    time_air_data = data_air(:,1)/1000000; air_alt_meter = data_air(:,2); air_temp = data_air(:,3);
+  else
+    time_air_data = 0; air_alt_meter = 0; air_temp = 0;
+  endif
+  if(data_land_detect_avail)
+    data_land_detect = dlmread(fname_land_detect, ',',1,0);
+    time_land_detect = data_land_detect(:,1)/1000000; land_detect = [ data_land_detect(:,3) data_land_detect(:,4) data_land_detect(:,5) data_land_detect(:,6) ];
+  else
+    time_land_detect = 0; land_detect = [0 0 0 0];
+  endif
+  if(data_v_status_avail)
+    data_v_status = dlmread(fname_v_status, ',',1,0);
+    time_v_status = data_v_status(:,1)/1000000; v_status = [ data_v_status(:,5) data_v_status(:,6) data_v_status(:,7) data_v_status(:,8) ];
+  else
+    time_v_status = 0; v_status = [0 0 0 0];
+  endif
   %% Plot attitude control
-  plotAttitudeControl(time_att, att_rpy, att_q, time_att_sp, att_rpy_sp, time_input_rc, input_rc, folderName);
+  plotAttitudeControl(time_att, att_rpy, att_q, 
+    time_att_sp, att_rpy_sp, 
+    time_input_rc, input_rc, 
+    folderName);
   %% Plot raw sensor data
   plotSensorData(time_sensor, gyro_xyz, acc_xyz, folderName);
   %% Plot for Z axis data
-  plotAltitudeControl(time_lp, lp_xyz(:,3), lp_Vxyz(:,3), dist_z, dist_vz, time_lp_sp, lp_sp_xyz(:,3), lp_sp_Vxyz(:,3), time_dist, current_distance, time_input_rc, input_rc, folderName);
+  plotAltitudeControl(time_lp, lp_xyz(:,3), lp_Vxyz(:,3), dist_z, dist_vz, 
+    time_lp_sp, lp_sp_xyz(:,3), lp_sp_Vxyz(:,3), 
+    time_dist, current_distance, 
+    time_input_rc, input_rc, 
+    time_air_data, air_alt_meter, 
+    time_land_detect, land_detect,
+    time_v_status, v_status,
+    folderName);
   %% Plot for x, y, z axis data
-  plotPositionControl(time_lp, lp_xyz, lp_Vxyz, time_lp_sp, lp_sp_xyz, lp_sp_Vxyz, time_flow, flow_int_xy, time_input_rc, input_rc, folderName);
+  plotPositionControl(time_lp, lp_xyz, lp_Vxyz, 
+    time_lp_sp, lp_sp_xyz, lp_sp_Vxyz, 
+    time_flow, flow_int_xy, 
+    time_input_rc, input_rc, 
+    time_v_status, v_status,
+    folderName);
   %% Plot power source
-  plotPower(time_pwr_sys, pwr_sys_5v, time_batt, batt_V, batt_curr, batt_disch_mah, folderName);
+  plotPower(time_pwr_sys, pwr_sys_5v, 
+    time_batt, batt_V, batt_curr, batt_disch_mah, 
+    folderName);
   
 endfunction
 %------------- END OF CODE --------------
