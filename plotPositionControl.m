@@ -13,6 +13,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     flow_y = [flow_y (flow_y(i-1)+(flow_int_xy(i,2)/(time_flow(i)-time_flow(i-1))))];
   endfor
   h_flow = figure(5, 'Position',[650,900,600,400]);
+  clf(h_flow);
   subplot(211)
     plot(time_flow, -(flow_x-1)/10, 'LineWidth',1.5);
     grid on;
@@ -32,6 +33,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     hold off;
   
   h_xy = figure(6,'Position',[700,750,600,400]);
+  clf(h_xy);
   subplot(211)
     plot(time_lp,lp_xyz(:,1), 'r-','LineWidth',1.5);
     grid on;
@@ -72,7 +74,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     for i=2:length(time_v_status)
       if(v_status(i,1)!=v_status(i-1,1))
         pos_x = (time_v_status(i)-time_lp(1))/(time_lp(length(time_lp)) - time_lp(1));
-        if( (pos_x - pos_x_prev) < 0.04) hgt = 0.02; else hgt = 0; endif;
+        if( (pos_x - pos_x_prev) < 0.04) hgt = 0.03; else hgt = 0; endif;
         x0 = pos(1) + pos_x * pos(3);
         y0 = pos(2);
         x1 = x0;
@@ -88,6 +90,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
   saveas(h_xy,saveName);
   
   h_vxy = figure(7,'Position',[750,600,600,400]);
+  clf(h_vxy);
   subplot(211)
     plot(time_lp,lp_Vxyz(:,1), 'LineWidth',1.5);
     grid on;

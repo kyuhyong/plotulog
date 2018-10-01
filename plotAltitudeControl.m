@@ -8,6 +8,7 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
     path)
   input_z = (input_rc(:,3)-1500)/500;  %rc roll channel set to 3
   h_alt = figure(4,'Position',[100,450,600,500]);
+  clf(h_alt);
   subplot(211)
     plot(time_lp, -lp_z,'LineWidth',1.2);
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
@@ -19,6 +20,8 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
       plot(time_distance, current_distance, 'LineWidth',1.5);
       plot(time_input_rc, input_z, 'LineWidth',1);
       takeoff = false;
+      pos_x_touched_prev = 0;
+      pos_x_mayLanded_prev = 0;
       pos = get(gca, "Position");   %Get plot position [x, y, width, height]
       for i=2:length(time_land_detect)
         for j=1:4
@@ -28,9 +31,21 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
             y0 = pos(2);
             x1 = x0;
             y1 = pos(2)+pos(4);
-            if(j==1) if(takeoff) msg = "Land"; takeoff = false; else msg = "Take Off"; takeoff = true; endif; hgt = 0; endif
-            if(j==2) msg = "Falling"; hgt = 0.03;endif
-            if(j==3) msg = "Touched"; hgt = 0.05;endif
+            switch(j)
+              case 1
+                if(takeoff) msg = "Land"; takeoff = false; else msg = "Take Off"; takeoff = true; endif; 
+                hgt = 0; 
+              case 2 
+                msg = "Falling"; hgt = 0.03;
+              case 3 
+                if( (pos_x - pos_x_touched_prev) < 0.04 ) msg = ""; 
+                else msg = "Touched"; hgt = 0.05; endif;
+                pos_x_touched_prev = pos_x; hgt = 0.05;
+              case 4
+                if( (pos_x - pos_x_mayLanded_prev) < 0.04 ) msg = "";
+                else msg = "Landed?";  endif;
+                pos_x_mayLanded_prev = pos_x; hgt = 0.08;
+            endswitch
             annotation("line", [x0 x1], [y0 y1], "linestyle", "--");
             annotation("textbox", [x0 y0 + hgt 0.1 0.1],"string", msg, "backgroundcolor","w");
           endif
@@ -41,7 +56,7 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
       for i=2:length(time_v_status)
         if(v_status(i,1)!=v_status(i-1,1))
           pos_x = (time_v_status(i)-time_lp(1))/(time_lp(length(time_lp)) - time_lp(1));
-          if( (pos_x - pos_x_prev) < 0.04) hgt = 0.02; else hgt = 0; endif;
+          if( (pos_x - pos_x_prev) < 0.04) hgt = 0.03; else hgt = 0; endif;
           x0 = pos(1) + pos_x * pos(3);
           y0 = pos(2) + 0.08;
           x1 = x0;
