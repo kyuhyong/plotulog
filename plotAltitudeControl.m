@@ -12,7 +12,7 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
   subplot(211)
     plot(time_lp, -lp_z,'LineWidth',1.2);
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
-    ylim( [min(lp_z) 2.5]);
+    ylim( [min(-lp_z)-1 max(-lp_z)+1]);
     grid on;
     set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("Distance (m)");  title("Position Z");
     hold on;
