@@ -49,19 +49,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     hold on;
     plot(time_sp, sp_xyz(:,1), 'LineWidth',1.5);
     legend("Local pos", "Set Point");
-    pos_x_prev = 0;
-    plot([time_v_status(1); time_v_status(1)],[plotYmin; plotYmax], "color", "b", "LineWidth", 1.3, "linestyle", "--");
-    text(time_v_status(1), plotYmin+plotYstep, getNavState(v_status(1,1)), 'FontSize',12);
-    for i=2:length(time_v_status)
-      if( v_status(i,1) != v_status(i-1,1) )
-        pos_x = time_v_status(i);
-        if( (pos_x - pos_x_prev) < 1) n=2; else n=1; endif;
-        msg = getNavState(v_status(i,1));
-        plot([pos_x; pos_x],[plotYmin; plotYmax], "color", "b", "LineWidth", 1.3, "linestyle", "--");
-        text(pos_x, plotYmin+plotYstep*n, msg, 'FontSize',12);
-        pos_x_prev = pos_x;
-      endif
-    endfor
+    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
     hold off;
   subplot(212)
     plot(time_lp, lp_xyz(:,2), 'r-','LineWidth',1.5);  
@@ -75,19 +63,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     hold on;
     plot(time_sp, sp_xyz(:,2), 'LineWidth',1.5);
     legend("Local pos", "Set Point");
-    pos_x_prev = 0;
-    plot([time_v_status(1); time_v_status(1)],[plotYmin; plotYmax], "color", "b", "LineWidth", 1.3, "linestyle", "--");
-    text(time_v_status(1), plotYmin+plotYstep, getNavState(v_status(1,1)), 'FontSize',12);
-    for i=2:length(time_v_status)
-      if( v_status(i,1) != v_status(i-1,1) )
-        pos_x = time_v_status(i);
-        if( (pos_x - pos_x_prev) < 1) n=2; else n=1; endif;
-        msg = getNavState(v_status(i,1));
-        plot([pos_x; pos_x],[plotYmin; plotYmax], "color", "b", "LineWidth", 1.3, "linestyle", "--");
-        text(pos_x, plotYmin+plotYstep*n, msg, 'FontSize',12);
-        pos_x_prev = pos_x;
-      endif
-    endfor
+    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
     hold off;
   saveName = sprintf("%sPosition_Control.png", path)
   saveas(h_xy,saveName);
@@ -97,21 +73,33 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
   clf(h_vxy);
   subplot(211)
     plot(time_lp,lp_Vxyz(:,1), 'LineWidth',1.5);
+    xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
+    plotYmin = min(lp_xyz(:,1))-1;
+    plotYmax = max(lp_xyz(:,1))+1;
+    plotYstep = (plotYmax - plotYmin)/12;
+    ylim( [plotYmin plotYmax]);
     grid on;
     set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("X speed (m/s)");  title("Velocity X (To North)");
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,1),'LineWidth',1);
     legend("Local pos", "Set Point");
+    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
     hold off;
   subplot(212)
     plot(time_lp, lp_Vxyz(:,2), 'LineWidth',1.5);  
+    xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
+    plotYmin = min(lp_xyz(:,2))-1;
+    plotYmax = max(lp_xyz(:,2))+1;
+    plotYstep = (plotYmax - plotYmin)/15;
+    ylim( [plotYmin plotYmax]);
     grid on;
     set (gca, "xminorgrid", "on"); xlabel("Time(sec)");  ylabel("Y speed (m/s)");  title("Velocity Y (To East)");
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,2),'LineWidth',1);
     legend("Local pos", "Set Point");
+    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
     hold off;
   saveName = sprintf("%sPosition_VelocityControl.png", path)
   saveas(h_vxy,saveName);
