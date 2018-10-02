@@ -1,7 +1,6 @@
-function flagLandState(plotYmin, plotYmax, plotYstep, time_land_detect, land_detect)
+function flagLandState(yl, flagYstep, time_land_detect, land_detect)
   % @Description: Plot flags at chagne of land state
-  % @Input: plotYmin minimum plot y axis
-  %         plotYmax maximum plot y axis
+  % @Input: yl ylim of plot
   %         plotYstep steps for placing text (for texts not to overlap)
   %         time_land_detect timestamp log of land detect
   %         land_detect  log of land detect
@@ -31,8 +30,8 @@ function flagLandState(plotYmin, plotYmax, plotYstep, time_land_detect, land_det
             else msg = "Landed?";  endif;
             pos_x_mayLanded_prev = pos_x; n=2;
         endswitch
-        plot([pos_x; pos_x],[plotYmin; plotYmax], "color", "r", "LineWidth", 1.3, "linestyle", "-.");
-        text(pos_x, plotYmax-plotYstep*n, msg, 'FontSize',12);
+        plot([pos_x; pos_x],[yl(1); yl(2)], "color", "r", "LineWidth", 1.3, "linestyle", "-.");
+        text(pos_x, yl(2)-flagYstep*n, msg, 'FontSize',12);
       endif
     endfor
   endfor

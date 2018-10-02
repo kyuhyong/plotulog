@@ -42,28 +42,26 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     grid on;
     set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("X (m)");  title("Position X (To East)");
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);    
-    plotYmin = min(lp_xyz(:,1))-1;
-    plotYmax = max(lp_xyz(:,1))+1;
-    plotYstep = (plotYmax - plotYmin)/12;
-    ylim( [plotYmin plotYmax]);
     hold on;
     plot(time_sp, sp_xyz(:,1), 'LineWidth',1.5);
     legend("Local pos", "Set Point");
-    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
+    %% Add flags for state change
+    yl = ylim;
+    flagYstep = (yl(2) - yl(1))/15;
+    flagControlState(yl, flagYstep, time_v_status, v_status);
     hold off;
   subplot(212)
     plot(time_lp, lp_xyz(:,2), 'r-','LineWidth',1.5);  
     grid on;
     set (gca, "xminorgrid", "on"); xlabel("Time(sec)");  ylabel("Y (m)");  title("Position Y (To North)");
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
-    plotYmin = min(lp_xyz(:,2))-1;
-    plotYmax = max(lp_xyz(:,2))+1;
-    plotYstep = (plotYmax - plotYmin)/15;
-    ylim( [plotYmin plotYmax]);
     hold on;
     plot(time_sp, sp_xyz(:,2), 'LineWidth',1.5);
     legend("Local pos", "Set Point");
-    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
+    %% Add flags for state change
+    yl = ylim;
+    flagYstep = (yl(2) - yl(1))/15;
+    flagControlState(yl, flagYstep, time_v_status, v_status);
     hold off;
   saveName = sprintf("%sPosition_Control.png", path)
   saveas(h_xy,saveName);
@@ -74,32 +72,30 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
   subplot(211)
     plot(time_lp,lp_Vxyz(:,1), 'LineWidth',1.5);
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
-    plotYmin = min(lp_xyz(:,1))-1;
-    plotYmax = max(lp_xyz(:,1))+1;
-    plotYstep = (plotYmax - plotYmin)/12;
-    ylim( [plotYmin plotYmax]);
     grid on;
     set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("X speed (m/s)");  title("Velocity X (To North)");
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,1),'LineWidth',1);
     legend("Local pos", "Set Point");
-    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
+    %% Add flags for state change
+    yl = ylim;
+    flagYstep = (yl(2) - yl(1))/15;
+    flagControlState(yl, flagYstep, time_v_status, v_status);
     hold off;
   subplot(212)
     plot(time_lp, lp_Vxyz(:,2), 'LineWidth',1.5);  
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
-    plotYmin = min(lp_xyz(:,2))-1;
-    plotYmax = max(lp_xyz(:,2))+1;
-    plotYstep = (plotYmax - plotYmin)/15;
-    ylim( [plotYmin plotYmax]);
     grid on;
     set (gca, "xminorgrid", "on"); xlabel("Time(sec)");  ylabel("Y speed (m/s)");  title("Velocity Y (To East)");
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,2),'LineWidth',1);
     legend("Local pos", "Set Point");
-    flagControlState(plotYmin, plotYmax, plotYstep, time_v_status, v_status);
+    %% Add flags for state change
+    yl = ylim;
+    flagYstep = (yl(2) - yl(1))/15;
+    flagControlState(yl, flagYstep, time_v_status, v_status);
     hold off;
   saveName = sprintf("%sPosition_VelocityControl.png", path)
   saveas(h_vxy,saveName);
