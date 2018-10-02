@@ -6,6 +6,8 @@ plotUlog is octave(open source equivalance of matlab) .m script package for plot
 
 [![Youtube plotUlog](http://img.youtube.com/vi/EZv81fV9Rec/0.jpg)](https://www.youtube.com/watch?v=EZv81fV9Rec "plotUlog")
 
+plotUlog is tested under octave version 4.4.2 on ubuntu 16.04.
+
 ## Installation
 
 
@@ -35,8 +37,7 @@ For convenience, change the .ulg file as
 
 **log###.ulg**
 
-## Run
-
+## Run plotUlog
 
 Launch octave and go to the folder you just cloned or unzipped.
 
@@ -56,6 +57,17 @@ Once .csv files are created you can re-plot by entering the folder created from 
 ```bash
 plotUlog("###_Description/")
 ```
+
+## Run compareSensorLogs
+
+Once Ulog files successfully converted to csv file, you can compare two different sensor data each other by calling compareSensorLogs as below
+If you have csv files under "001_log" and "002_log", enter 
+'''bash
+compareSensorLogs("001_log/","002_log/")
+'''
+
+and you will get these plot which makes easier for comparing two different sensor data. 
+![plotted sensor comparison](https://image.ibb.co/fkHWoe/sensor_Compare.png)
 
 ## Development
 
