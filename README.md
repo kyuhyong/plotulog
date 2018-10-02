@@ -62,9 +62,9 @@ plotUlog("###_Description/")
 
 Once Ulog files successfully converted to csv file, you can compare two different sensor data each other by calling compareSensorLogs as below
 If you have csv files under "001_log" and "002_log", enter 
-'''bash
+```bash
 compareSensorLogs("001_log/","002_log/")
-'''
+```
 
 and you will get these plot which makes easier for comparing two different sensor data. 
 ![plotted sensor comparison](https://image.ibb.co/fkHWoe/sensor_Compare.png)
