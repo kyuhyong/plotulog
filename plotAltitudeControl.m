@@ -7,78 +7,83 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
     time_v_status, v_status,
     path)
   input_z = (input_rc(:,3)-1500)/500;  %rc roll channel set to 3
+  
+  %% Draw plot for vertical (z axis) control
   h_alt = figure(4,'Position',[100,450,600,500]);
   clf(h_alt);
+  %% Draw plot for vertical position control
   subplot(211)
     plot(time_lp, -lp_z,'LineWidth',1.2);
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
-    ylim( [min(-lp_z)-1 max(-lp_z)+1]);
+    plotYmin = min(-lp_z)-1;
+    plotYmax = max(-lp_z)+1;
+    plotYstep = (plotYmax - plotYmin)/15;
+    ylim( [plotYmin plotYmax]);
     grid on;
-    set (gca, "xminorgrid", "on");  xlabel("Time(sec)");  ylabel("Distance (m)");  title("Position Z");
+    set (gca, "xminorgrid", "on");set (gca, "yminorgrid", "on");
+    set(gca, 'XAxisLocation', 'origin')
+    xlabel("Time(sec)");  ylabel("Distance (m)");  title("Position Z");
     hold on;
       plot(time_sp, -sp_z, 'LineWidth',1.5);
       plot(time_distance, current_distance, 'LineWidth',1.5);
       plot(time_input_rc, input_z, 'LineWidth',1);
+      plot( [time_lp(1); time_lp(length(time_lp))],[0; 0], "LineWidth", 1.3, "color", "black");
       takeoff = false;
       pos_x_touched_prev = 0;
       pos_x_mayLanded_prev = 0;
-      pos = get(gca, "Position");   %Get plot position [x, y, width, height]
       for i=2:length(time_land_detect)
         for j=1:4
           if(land_detect(i,j)!=land_detect(i-1,j))
-            pos_x = (time_land_detect(i)-time_lp(1))/(time_lp(length(time_lp)) - time_lp(1));
-            x0 = pos(1) + pos_x * pos(3);
-            y0 = pos(2);
-            x1 = x0;
-            y1 = pos(2)+pos(4);
+            pos_x = time_land_detect(i);
+            n=1;
             switch(j)
               case 1
-                if(takeoff) msg = "Land"; takeoff = false; else msg = "Take Off"; takeoff = true; endif; 
-                hgt = 0; 
+                if(takeoff) msg = "Land"; takeoff = false; 
+                else msg = sprintf("Take Off @%.2f",time_land_detect(i)); takeoff = true; endif; 
+                n = 1; 
               case 2 
-                msg = "Falling"; hgt = 0.03;
+                msg = "Falling"; n=3;
               case 3 
-                if( (pos_x - pos_x_touched_prev) < 0.04 ) msg = ""; 
-                else msg = "Touched"; hgt = 0.05; endif;
-                pos_x_touched_prev = pos_x; hgt = 0.05;
+                if( (pos_x - pos_x_touched_prev) < 1 ) msg = ""; 
+                else msg = "Touched"; n=3; endif;
+                pos_x_touched_prev = pos_x;
               case 4
-                if( (pos_x - pos_x_mayLanded_prev) < 0.04 ) msg = "";
+                if( (pos_x - pos_x_mayLanded_prev) < 1 ) msg = "";
                 else msg = "Landed?";  endif;
-                pos_x_mayLanded_prev = pos_x; hgt = 0.08;
+                pos_x_mayLanded_prev = pos_x; n=2;
             endswitch
-            annotation("line", [x0 x1], [y0 y1], "linestyle", "--");
-            annotation("textbox", [x0 y0 + hgt 0.1 0.1],"string", msg, "backgroundcolor","w");
+            plot([pos_x; pos_x],[plotYmin; plotYmax], "color", "r", "LineWidth", 1.3, "linestyle", "-.");
+            text(pos_x, plotYmin+plotYstep*n, msg, 'FontSize',12);
           endif
         endfor
       endfor
       pos_x_prev = 0;
-      annotation("textbox", [pos(1) pos(2)+0.08 0.1 0.1],"string",getNavState(v_status(1,1)) , "color","b", "backgroundcolor","w");
+      plot([time_v_status(1); time_v_status(1)],[plotYmin; plotYmax], "color", "b", "LineWidth", 1.3, "linestyle", "--");
+      text(time_v_status(1), plotYmax-plotYstep, getNavState(v_status(1,1)), 'FontSize',12);
       for i=2:length(time_v_status)
-        if(v_status(i,1)!=v_status(i-1,1))
-          pos_x = (time_v_status(i)-time_lp(1))/(time_lp(length(time_lp)) - time_lp(1));
-          if( (pos_x - pos_x_prev) < 0.04) hgt = 0.03; else hgt = 0; endif;
-          x0 = pos(1) + pos_x * pos(3);
-          y0 = pos(2) + 0.08;
-          x1 = x0;
-          y1 = pos(2)+pos(4);
+        if( v_status(i,1) != v_status(i-1,1) )
+          pos_x = time_v_status(i);
+          if( (pos_x - pos_x_prev) < 1) n=2; else n=1; endif;
           msg = getNavState(v_status(i,1));
-          annotation("line", [x0 x1], [y0 y1], "color","b");
-          annotation("textbox", [x0 y0 + hgt 0.1 0.1],"string", msg, "color","b", "backgroundcolor","w");
+          plot([pos_x; pos_x],[plotYmin; plotYmax], "color", "b", "LineWidth", 1.3, "linestyle", "--");
+          text(pos_x, plotYmax-plotYstep*n, msg, 'FontSize',12);
           pos_x_prev = pos_x;
         endif
       endfor      
       [hleg1 hobj1] = legend("Local Z", "Setpoint Z", "Current Distance", "Throttle Input");
       set(hleg1,'position',[0.77 0.77 0.13 0.21])
     hold off;
+  %% Draw plot for vertical speed control
   subplot(212)
     plot(time_lp, -lp_vz,'LineWidth',1.5);  
     xlabel("Time(sec)");  ylabel("Velocity (m/s)");  title("Velocity Z");
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     grid on;
-    set (gca, "xminorgrid", "on");
+    set (gca, "xminorgrid", "on");set (gca, "yminorgrid", "on");
     hold on;  
     plot(time_sp, -sp_vz,'LineWidth',1.5);
     plot(time_input_rc, input_z, 'LineWidth',1.5);
+    plot( [time_lp(1); time_lp(length(time_lp))],[0; 0], "LineWidth", 1.2, "color", "black");
     legend("LP Vz", "Setpoint Vz", "Throttle");
     hold off;
   saveName = sprintf("%sAltitude_Control.png", path)
