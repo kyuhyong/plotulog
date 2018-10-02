@@ -6,7 +6,7 @@ plotUlog is octave(open source equivalance of matlab) .m script package for plot
 
 [![Youtube plotUlog](http://img.youtube.com/vi/EZv81fV9Rec/0.jpg)](https://www.youtube.com/watch?v=EZv81fV9Rec "plotUlog")
 
-plotUlog is tested under octave version 4.4.2 on ubuntu 16.04.
+Please note **plotUlog** is tested under octave version 4.4.2 on ubuntu 16.04.
 
 ## Installation
 
@@ -66,7 +66,8 @@ If you have csv files under "001_log" and "002_log", enter
 compareSensorLogs("001_log/","002_log/")
 ```
 
-and you will get these plot which makes easier for comparing two different sensor data. 
+and you will get these plots which makes easier for comparing two different sensor data at the same time.
+
 ![plotted sensor comparison](https://image.ibb.co/fkHWoe/sensor_Compare.png)
 
 ## Development
