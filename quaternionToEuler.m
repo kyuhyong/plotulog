@@ -23,6 +23,10 @@ function euler = quaternionToEuler(q0, q1, q2, q3)
   
   roll  = atan2(t3, t4) * 180/pi;
   pitch = asin(t2) * 180/pi;
-  yaw   = atan2(t1, t0) * 180/pi;
+  %Fixed yaw coversion from yaw   = atan2(t1, t0) * 180/pi;
+  siny_cosp = 2 * (q0*q3 + q1*q2);
+  cosy_cosp = 1 - 2*(q2*q2 + q3*q3);
+  yaw = atan2(siny_cosp, cosy_cosp) * 180/pi;
+  
   euler = [ roll pitch yaw ];
 endfunction
