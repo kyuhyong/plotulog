@@ -3,6 +3,7 @@
 plotUlog is octave(open source equivalance of matlab) .m script package for plotting ULog files parsed and converted by pyulog. ULog is a self-describing logging format which is documented  [here](http://dev.px4.io/advanced-ulog-file-format.html).
 
 [GNU Octave](https://www.gnu.org/software/octave/) is powerful mathmatics software with built in plotting and visualization tools which runs on Linux, macOS, BSD and Windows. 
+Tested on Octave **4.4.1** and later.
 
 [![Youtube plotUlog](http://img.youtube.com/vi/EZv81fV9Rec/0.jpg)](https://www.youtube.com/watch?v=EZv81fV9Rec "plotUlog")
 
@@ -11,9 +12,12 @@ Please note **plotUlog** is tested under octave version 4.4.2 on ubuntu 16.04.
 ## Installation
 
 
-- Install octave
+- Install octave on ubuntu
+Add ppa to install 4.4.1 or later version of octave
 ```bash
-$ sudo apt-get install octave
+$ sudo add-apt-repository ppa:octave/stable
+$ sudo apt update
+$ sudo apt install octave
 ```
 Octave can be run from launch bar in ubuntu 
 
