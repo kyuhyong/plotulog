@@ -44,7 +44,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);    
     hold on;
     plot(time_sp, sp_xyz(:,1), 'LineWidth',1.5);
-    legend("Local pos", "Set Point");
+    legend("Local pos", "Set Point",'location','eastoutside');
     %% Add flags for state change
     yl = ylim;
     flagYstep = (yl(2) - yl(1))/15;
@@ -57,14 +57,15 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_xyz(:,2), 'LineWidth',1.5);
-    legend("Local pos", "Set Point");
+    legend("Local pos", "Set Point",'location','eastoutside');
     %% Add flags for state change
     yl = ylim;
     flagYstep = (yl(2) - yl(1))/15;
     flagControlState(yl, flagYstep, time_v_status, v_status);
     hold off;
-  saveName = sprintf("%sPosition_Control.png", path)
-  saveas(h_xy,saveName);
+  saveName = sprintf("%sPosition_Control", path)
+  print(h_xy, saveName, "-dpdf","-color","-S400,800");
+  print(h_xy, saveName, "-dpng","-color", "-r200");
   
   %% Draw plot for speed x, y control
   h_vxy = figure(7,'Position',[750,600,600,400]);
@@ -77,7 +78,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,1),'LineWidth',1);
-    legend("Local pos", "Set Point");
+    legend("Local pos", "Set Point",'location','eastoutside');
     %% Add flags for state change
     yl = ylim;
     flagYstep = (yl(2) - yl(1))/15;
@@ -91,14 +92,15 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     hold on;
     plot(time_sp, sp_Vxyz(:,2),'LineWidth',1);
-    legend("Local pos", "Set Point");
+    legend("Local pos", "Set Point",'location','eastoutside');
     %% Add flags for state change
     yl = ylim;
     flagYstep = (yl(2) - yl(1))/15;
     flagControlState(yl, flagYstep, time_v_status, v_status);
     hold off;
   saveName = sprintf("%sPosition_VelocityControl.png", path)
-  saveas(h_vxy,saveName);
+  print(h_vxy, saveName, "-dpdf","-color","-S400,800");
+  print(h_vxy, saveName, "-dpng","-color", "-r200");
   
   %% Draw 3-D position estimation
   interval = time_lp(2)-time_lp(1);

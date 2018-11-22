@@ -12,11 +12,12 @@ function plotPower(time_pwr_sys, pwr_sys_5v, time_batt, batt_V, batt_curr, batt_
   hold on;
   plot(time_batt, batt_V, 'LineWidth', 1.3);
   plot(time_batt, batt_curr, 'LineWidth',1.3);
-  plot(time_batt, batt_disch_mah/100);
+  plot(time_batt, batt_disch_mah/100, 'LineWidth',1.3);
   legSys5v = sprintf("System 5V min:%.2f, max:%.2f",min(pwr_sys_5v), max(pwr_sys_5v));
   legBattV = sprintf("Battery V min:%.2f, max:%.2f",min(batt_V), max(batt_V));
-  lgnd = legend(legSys5v, legBattV, "Currents(A)", "Discharge [mAh/100]");
+  lgnd = legend(legSys5v, legBattV, "Currents(A)", "Discharge [mAh/100]",'location','eastoutside');
   hold off;
-  saveName = sprintf("%sPower.png", path)
-  saveas(h_pwr,saveName);
+  saveName = sprintf("%sPower", path)
+  print(h_pwr, saveName, "-dpdf","-color","-S600,400");
+  print(h_pwr, saveName, "-dpng","-color", "-r200");
 endfunction

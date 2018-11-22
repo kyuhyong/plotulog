@@ -9,7 +9,7 @@ function plotSensorData(time, gyro_xyz, accel_xyz, path)
     hold on;
     plot(time, gyro_xyz(:,2));  
     plot(time, gyro_xyz(:,3));
-    legend("X", "Y", "Z");
+    legend("X", "Y", "Z",'location','eastoutside');
     hold off;
   subplot(212)
     plot(time, accel_xyz(:,1));  
@@ -19,8 +19,9 @@ function plotSensorData(time, gyro_xyz, accel_xyz, path)
     hold on;
     plot(time, accel_xyz(:,2));  
     plot(time, accel_xyz(:,3));
-    legend("X", "Y", "Z");
+    legend("X", "Y", "Z",'location','eastoutside');
     hold off;
-  saveName = sprintf("%sSensor_Data.png", path)
-  saveas(h_sens,saveName);
+  saveName = sprintf("%sSensor_Data", path)
+  print(h_sens, saveName, "-dpdf","-color","-S600,800");
+  print(h_sens, saveName, "-dpng","-color", "-r200");
 endfunction

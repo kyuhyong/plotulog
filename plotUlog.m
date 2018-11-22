@@ -1,4 +1,4 @@
-function plotUlogs(varargin)
+function plotUlog(varargin)
 % Inputs:
 %    arg1 - File name of .ulog file or Folder name of already created csv files location
 %    arg2 - Folder name description
