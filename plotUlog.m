@@ -119,7 +119,6 @@ function plotUlog(varargin)
     lp_sp_Vxyz = [ data_lp_sp(:,7) data_lp_sp(:,8) data_lp_sp(:,9) ];
   else time_lp_sp = 0; lp_sp_xyz = [ 0 0 0 ]; lp_sp_Vxyz = [ 0 0 0 ];
   endif;
-  data_sens = dlmread(fname_sens,',',1,0);
   if(data_dbg_vect_avail) 
     data_dbg_vect = dlmread(fname_debug_vect,',',1,0);
     time_dbg_vect = data_dbg_vect(:,1)/1000000; 
@@ -132,6 +131,7 @@ function plotUlog(varargin)
   else time_flow = 0; flow_int_xy = [ 0 0 ];
   endif;
   if(data_sensor_avail)
+    data_sens = dlmread(fname_sens,',',1,0);
     time_sensor = data_sens(:,1)/1000000; 
     gyro_xyz =[ data_sens(:,2) data_sens(:,3) data_sens(:,4) ]; 
     acc_xyz = [ data_sens(:,7) data_sens(:,8) data_sens(:,9) ];
