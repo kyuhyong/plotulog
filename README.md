@@ -77,7 +77,7 @@ and you will get these plots which makes easier for comparing two different sens
 
 ## Run analyzeSensors
 
-Now you can anaylze accelerometer, gyro data with builtin FFT function by simply run analyzeSensors with designated folder as below.
+Now you can anaylze accelerometer, gyro data in a designated folder using builtin FFT function by simply run analyzeSensors as below.
 If you have sensor_combined_0.csv file under "001_log" folder, enter
 ```bash
 analyzeSensors("001_log/")
