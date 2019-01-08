@@ -20,7 +20,7 @@ $ sudo add-apt-repository ppa:octave/stable
 $ sudo apt update
 $ sudo apt install octave
 ```
-Octave can be run from launch bar in ubuntu 
+Now Octave can be run from launch bar in ubuntu 
 
 - Install **pyulog** which will parse ULog file and convert to .csv files.
 
@@ -75,6 +75,18 @@ and you will get these plots which makes easier for comparing two different sens
 
 ![plotted sensor comparison](https://image.ibb.co/fkHWoe/sensor_Compare.png)
 
+## Run analyzeSensors
+
+Now you can anaylze accelerometer, gyro data with builtin FFT function by simply run analyzeSensors with designated folder as below.
+If you have sensor_combined_0.csv file under "001_log" folder, enter
+```bash
+analyzeSensors("001_log/")
+```
+Or if you want to specify range of the data to look at such as from 50.0 to 77.0, enter
+```bash
+analyzeSensors("001_log/",[50.0 77.0])
+```
+![plotted sensor FFT analysis](https://i.ibb.co/XFrKVfb/FFT-of-Acc-Z.png)
 ## Development
 
 
