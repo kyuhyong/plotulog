@@ -78,8 +78,11 @@ and you will get these plots which makes easier for comparing two different sens
 ## Run analyzeSensors
 
 Many drones suffers from stability issues due to resonance vibrations from lots of unknown factors such as motors, mechanical configurations, unbalanced props and etc. 
+
 FFT analysis shows the resonance frequency and its magnitude and may gives an idea about what is causing the problem.
+
 Thanks to the built in FFT functions in octave, you can anaylze accelerometer, gyro data in a designated folder by simply running the analyzeSensors as below.
+
 If you have sensor_combined_0.csv file under "001_log" folder, enter
 ```bash
 analyzeSensors("001_log/")
