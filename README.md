@@ -1,6 +1,7 @@
 # plotUlog
 
-plotUlog is octave(open source equivalance of matlab) .m script package for plotting ULog files parsed and converted by pyulog. ULog is a self-describing logging format which is documented  [here](http://dev.px4.io/advanced-ulog-file-format.html).
+plotUlog is octave(open source equivalance of matlab) .m script package for plotting ULog files parsed and converted by pyulog.  
+ULog is a self-describing logging format which is documented  [here](http://dev.px4.io/advanced-ulog-file-format.html).
 
 [GNU Octave](https://www.gnu.org/software/octave/) is powerful mathmatics software with built in plotting and visualization tools which runs on Linux, macOS, BSD and Windows. 
 Tested on Octave **4.4.1** and later.
