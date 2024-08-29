@@ -5,6 +5,7 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
     time_air_data, air_alt_meter, 
     time_land_detect, land_detect,
     time_v_status, v_status,
+    time_thrust_sp, thrust_sp,
     path)
   input_z = (input_rc(:,3)-1500)/500;  %rc throttle channel set to 3
   
@@ -17,7 +18,7 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
     xlim( [ time_lp(1) time_lp(length(time_lp)) ]);
     grid on;
     set(gca, 'XAxisLocation', 'origin')
-    xlabel("Time(sec)");  ylabel("Distance (m)");  title("Position Z");
+    xlabel("Time(sec)");  ylabel("Height (m)");  title("Position Z");
     hold on;
       plot(time_sp, -sp_z, 'LineWidth',1.5);
       plot(time_distance, current_distance, 'LineWidth',1.5);
@@ -54,8 +55,9 @@ function plotAltitudeControl(time_lp, lp_z, lp_vz, dist_z, dist_vz,
     hold on;  
       plot(time_sp, -sp_vz,'LineWidth',1.5);
       plot(time_input_rc, input_z, 'LineWidth',1.5);
+      plot(time_thrust_sp, -thrust_sp, 'LineWidth', 1.5);
       plot( [time_lp(1); time_lp(length(time_lp))],[0; 0], "LineWidth", 1.2, "color", "black");
-      [hleg1 hobj1] = legend("LP Vz", "Setpoint Vz", "Throttle",'location','eastoutside');
+      [hleg1 hobj1] = legend("LP Vz", "Setpoint Vz", "Throttle", "Thrust Set Point",'location','eastoutside');
       set(hleg1, "fontsize",12);
       %% Add flags for state change
       yl = ylim;

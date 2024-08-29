@@ -3,6 +3,7 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
     time_flow, flow_int_xy, 
     time_input_rc, input_rc, 
     time_v_status, v_status,
+    time_att, att_q,
     path)  
   % Local pos NED has x towards North, y East and z Down. 
   input_x = (input_rc(:,1)-1500)/100;  %RC Roll channel set to 1 and Robot frame y is torward the Right
@@ -105,15 +106,58 @@ function plotPositionControl(time_lp, lp_xyz, lp_Vxyz,
   %% Draw 3-D position estimation
   interval = time_lp(2)-time_lp(1);
   figure(8,'Position',[800,450,600,400]);
-  h = plot3(lp_xyz(:,1), lp_xyz(:,2), -lp_xyz(:,3), 'LineWidth', 1.5);
+  h = plot3(lp_xyz(:,1), lp_xyz(:,2), lp_xyz(:,3), 'LineWidth', 1.5);
+  hold on;
+  % Plot unit vectors at the origin for the x, y, and z axes
+  % Plot initial static unit vectors (optional)
+  % X-axis unit vector (red)
+  h_x = quiver3(0, 0, 0, 1, 0, 0, 'r', 'LineWidth', 2);
+  % Y-axis unit vector (green)
+  h_y = quiver3(0, 0, 0, 0, 1, 0, 'g', 'LineWidth', 2);
+  % Z-axis unit vector (blue)
+  h_z = quiver3(0, 0, 0, 0, 0, 1, 'b', 'LineWidth', 2);
+  % Placeholder for the rotated unit vectors
+  h_rot_x = quiver3(0, 0, 0, 0, 0, 0, 'r', 'LineWidth', 1.5); % Rotated X-axis vector
+  h_rot_y = quiver3(0, 0, 0, 0, 0, 0, 'g', 'LineWidth', 1.5); % Rotated Y-axis vector
+  h_rot_z = quiver3(0, 0, 0, 0, 0, 0, 'b', 'LineWidth', 1.5); % Rotated Z-axis vector
+
   grid minor;
   xlabel("X (m)");  ylabel("Y (m)"); zlabel("Height (m)"); title("Position Estimation X,Y,Z");
   for k=1:length(lp_xyz(:,1));
     set(h, 'XData', lp_xyz((1:k),1));
     set(h, 'YData', lp_xyz((1:k),2));
     set(h, 'ZData', -lp_xyz((1:k),3));
+    % Rotate the unit vector using the quaternion att_q(k, :)
+    r_x = rotate_vector_by_quaternion([2, 0, 0], att_q(k, :)); % Assuming rotation of X-axis unit vector
+    r_y = rotate_vector_by_quaternion([0, 2, 0], att_q(k, :)); % Assuming rotation of X-axis unit vector
+    r_z = rotate_vector_by_quaternion([0, 0, 2], att_q(k, :)); % Assuming rotation of X-axis unit vector
+    
+    % Update the quiver to show the rotated vector at the current position
+    set(h_rot_x, 'XData', lp_xyz(k, 1));
+    set(h_rot_x, 'YData', lp_xyz(k, 2));
+    set(h_rot_x, 'ZData', -lp_xyz(k, 3));
+    set(h_rot_x, 'UData', r_x(1));
+    set(h_rot_x, 'VData', r_x(2));
+    set(h_rot_x, 'WData', r_x(3));
+    
+    set(h_rot_y, 'XData', lp_xyz(k, 1));
+    set(h_rot_y, 'YData', lp_xyz(k, 2));
+    set(h_rot_y, 'ZData', -lp_xyz(k, 3));
+    set(h_rot_y, 'UData', r_y(1));
+    set(h_rot_y, 'VData', r_y(2));
+    set(h_rot_y, 'WData', r_y(3));
+    
+    set(h_rot_z, 'XData', lp_xyz(k, 1));
+    set(h_rot_z, 'YData', lp_xyz(k, 2));
+    set(h_rot_z, 'ZData', -lp_xyz(k, 3));
+    set(h_rot_z, 'UData', r_z(1));
+    set(h_rot_z, 'VData', r_z(2));
+    set(h_rot_z, 'WData', r_z(3));
     pause (0.01); % delay in seconds
     % alternatively could provide a velocity function
     % pause(sqrt(vx(k)^2+vy(k)^2+vz(k)^2));  
   endfor
 endfunction
+
+
+

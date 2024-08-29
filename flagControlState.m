@@ -12,6 +12,7 @@ function flagControlState(yl, flagYstep, time_v_status, v_status)
   for i=2:length(time_v_status)
     if( v_status(i,1) != v_status(i-1,1) )
       pos_x = time_v_status(i);
+      %printf("Pos_x(%d):%d\n",i, pos_x)
       if( (pos_x - pos_x_prev) < 1) n=2; else n=1; endif;
       msg = getNavState(v_status(i,1));
       plot([pos_x; pos_x],[yl(1); yl(2)], "color", "b", "LineWidth", 1.3, "linestyle", "--");

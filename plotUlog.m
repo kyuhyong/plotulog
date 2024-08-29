@@ -62,10 +62,11 @@ function plotUlog(varargin)
   fname_dist = sprintf("%slog%s_distance_sensor_0.csv",folderName, fnum);
   fname_input_rc = sprintf("%slog%s_input_rc_0.csv",folderName, fnum);
   fname_power_sys = sprintf("%slog%s_system_power_0.csv",folderName, fnum);
-  fname_batt_sts = sprintf("%slog%s_battery_status_0.csv",folderName, fnum);
+  fname_batt_sts = sprintf("%slog%s_battery_status_1.csv",folderName, fnum);
   fname_air_data = sprintf("%slog%s_vehicle_air_data_0.csv",folderName, fnum);
   fname_land_detect = sprintf("%slog%s_vehicle_land_detected_0.csv",folderName, fnum);
   fname_v_status = sprintf("%slog%s_vehicle_status_0.csv",folderName, fnum);
+  fname_thrust_sp = sprintf("%slog%s_vehicle_thrust_setpoint_0.csv",folderName, fnum);
   
   %% Check files
   data_att_avail = true; data_att_sp_avail = true; data_lp_avail = true; data_lp_sp_avail = true; data_dbg_vect_avail = true; data_flow_avail = true; 
@@ -87,13 +88,15 @@ function plotUlog(varargin)
   if(!checkFile(fname_air_data)) data_air_data_avail = false; endif;
   if(!checkFile(fname_land_detect)) data_land_detect_avail = false; endif;
   if(!checkFile(fname_v_status)) data_v_status_avail = false; endif;
+  data_thrust_sp_avail = true;
+  if(!checkFile(fname_thrust_sp)) data_thrust_sp_avail = false; endif;
   
   %% If file is available, read data from the file. otherwise set data as zero
   if(data_att_avail)
     data_att = dlmread(fname_att,',',1,0);
     time_att = data_att(:,1)/1000000; 
     att_rpy = [ data_att(:,2) data_att(:,3) data_att(:,4) ]; 
-    att_q = [data_att(:,5) data_att(:,6) data_att(:,7) data_att(:,8) ];
+    att_q = [data_att(:,3) data_att(:,4) data_att(:,5) data_att(:,6) ];
   else time_att = 0; att_rpy = [0 0 0]; att_q = [0 0 0 0];
   endif
   if(data_att_sp_avail)
@@ -106,8 +109,8 @@ function plotUlog(varargin)
   if(data_lp_avail) 
     data_lp = dlmread(fname_lp,',',1,0);
     time_lp = data_lp(:,1)/1000000; 
-    lp_xyz =  [ data_lp(:,5)  data_lp(:,6)  data_lp(:,7) ]; 
-    lp_Vxyz = [ data_lp(:,11) data_lp(:,12) data_lp(:,13)];
+    lp_xyz =  [ data_lp(:,6)  data_lp(:,7)  data_lp(:,8) ]; 
+    lp_Vxyz = [ data_lp(:,12) data_lp(:,13) data_lp(:,14)];
     lp_yaw = data_lp(:,21); dist_z = data_lp(:,23);  dist_vz = data_lp(:,24);
   else 
     time_lp = 0; lp_xyz = [0 0 0]; lp_Vxyz = [0 0 0]; lp_yaw = 0; dist_vz = 0; dist_z = 0;
@@ -164,7 +167,7 @@ function plotUlog(varargin)
   else
     time_batt = 0; batt_V = 0; batt_curr = 0; batt_disch_mah = 0;
   endif
-    if(data_air_data_avail)
+  if(data_air_data_avail)
     data_air = dlmread(fname_air_data, ',',1,0);
     time_air_data = data_air(:,1)/1000000; air_alt_meter = data_air(:,2); air_temp = data_air(:,3);
   else
@@ -182,6 +185,13 @@ function plotUlog(varargin)
   else
     time_v_status = 0; v_status = [0 0 0 0];
   endif
+
+  if(data_thrust_sp_avail)
+    data_thrust_sp = dlmread(fname_thrust_sp, ',',1,0);
+    time_thrust_sp = data_thrust_sp(:,1)/1000000; thrust_sp = [data_thrust_sp(:,3) data_thrust_sp(:,4) data_thrust_sp(:,5)];
+  else
+    time_thrust_sp = 0; thrust_sp = [0 0 0];
+  endif
   %% Plot attitude control
   plotAttitudeControl(time_att, att_rpy, att_q, 
     time_att_sp, att_rpy_sp, 
@@ -197,6 +207,7 @@ function plotUlog(varargin)
     time_air_data, air_alt_meter, 
     time_land_detect, land_detect,
     time_v_status, v_status,
+    time_thrust_sp, thrust_sp(:,3),
     folderName);
   %% Plot for x, y, z axis data
   plotPositionControl(time_lp, lp_xyz, lp_Vxyz, 
@@ -204,6 +215,7 @@ function plotUlog(varargin)
     time_flow, flow_int_xy, 
     time_input_rc, input_rc, 
     time_v_status, v_status,
+    time_att, att_q,
     folderName);
   %% Plot power source
   plotPower(time_pwr_sys, pwr_sys_5v, 
